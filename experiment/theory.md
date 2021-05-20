@@ -43,7 +43,7 @@ we define a new operation called opening. The opening operation smoothes objects
 <img src="images/theory_html_m777debab.png">
 
 
-<img  src="theory_html_m7e9b3438.png">
+<img  src="images/theory_html_m7e9b3438.png">
 
 The opening operation generally smoothes the boundary of the object, breaks narrow bands connecting two large foreground regions and eliminates thin bulges appear on the object boundary. Figure 3 illustrates few such cases.
 
@@ -51,11 +51,11 @@ The opening operation generally smoothes the boundary of the object, breaks narr
 
 By reversing the ordering of erosion and dilation operations, a closing operation is defined:
 
-<img src="theory_html_m781f428.png">
+<img src="images/theory_html_m781f428.png">
 
 Closing smoothes objects by adding pixels. All smoothing (both for closing and opening) is in relation to the size of the structuring element B.
 
-<img src="theory_html_m594e600f.png">
+<img src="images/theory_html_m594e600f.png">
 
 The closing operation tends to smooth the section of boundaries but as opposed to opening, it generally fuses narrow breaks and long thin gulfs, eliminates small holes smaller the size of B, and fills gaps in the boundary. Figure 4 highlights results of closing on an example image illustrating effect of closing operation.
 
