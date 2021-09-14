@@ -15,24 +15,6 @@
             "c":"Opening",
             "d":"Closing"
           },
-"correctAnswer":"c"}, 
-
-{"question":"3. A binary image consists of disks of sizes 3,7,9,15,17 pixels. We want to remove all the disks of size less than 13 pixels. Which morphological opeartion perform the task?",
-"answers":{
-            "a":"Erosion with structuring element(disk) of size 15",
-            "b":"Erosion with structuring element(disk) of size 13",
-            "c":"Dilation with structuring element(disk) of size 15",
-            "d":"Dilation with structuring element(disk) of size 13"
-          },
-"correctAnswer":"a"},
-
-{"question":"4. Which morphological operation is used for smoothing the contour of an object in grayscale image",
-"answers":{
-            "a":"Erosion",
-            "b":"Dilation",
-            "c":"Closing",
-            "d":"Opening"
-          },
 "correctAnswer":"c"}
 
 ]
