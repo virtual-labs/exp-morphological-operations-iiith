@@ -1,0 +1,1 @@
+The objective of this experiment is to understand the basics of morphological operations which are used in analyzing the form and shape details of image structures.

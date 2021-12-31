@@ -1,0 +1,20 @@
+[
+{"question":"1. To expand the boundary of an object in binary images the appropriate operation is",
+"answers":{
+            "a":"Erosion",
+            "b":"Dilation",
+            "c":"Opening",
+            "d":"Closing"
+          },
+"correctAnswer":"a"},
+
+{"question":"2. To eliminate the small holes in the binary images, the approriate operation is",
+"answers":{
+            "a":"Erosion",
+            "b":"Dilation",
+            "c":"Opening",
+            "d":"Closing"
+          },
+"correctAnswer":"c"}
+
+]
