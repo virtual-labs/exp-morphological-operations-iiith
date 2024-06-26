@@ -1,24 +1,24 @@
 <?php
 session_start();
-
-if($_GET["exp"]!="piping") {
-	if(isset($_GET["source"]) && isset($_GET["id"])) {
-	$_SESSION["currentS"]=$_GET["source"];
-	$_SESSION["id"]=$_GET["id"]; 
-	} else {
-	$_SESSION["id"]=time();
-	$_SESSION["state"]=0;
-	}
+$_GET["exp"] = "morph";
+$_SESSION["piping"] = 1;
+if ($_GET["exp"] != "piping") {
+    if (isset($_GET["source"]) && isset($_GET["id"])) {
+        $_SESSION["currentS"] = $_GET["source"];
+        $_SESSION["id"] = $_GET["id"];
+    } else {
+        $_SESSION["id"] = time();
+        $_SESSION["state"] = 0;
+    }
 }
 
-if(isset($_GET["assess"])) {
-	$_SESSION["currentS"]=1;
-	$_SESSION["id"]=$_GET["assess"];
-	$_SESSION["state"]=1;
-	}
-	
-	
-?> 
+if (isset($_GET["assess"])) {
+    $_SESSION["currentS"] = 1;
+    $_SESSION["id"] = $_GET["assess"];
+    $_SESSION["state"] = 1;
+}
+
+?>
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -35,16 +35,16 @@ if(isset($_GET["assess"])) {
 <title>Virtual Lab in Image Processing</title>
 
 
-<!-- Some META tags to help with Search Engine Optimization.  Please 
+<!-- Some META tags to help with Search Engine Optimization.  Please
 note however that META tags are NOT a magic bullet to get your web page
-to the top of search engine rankings.  They are just part of that effort.  You 
+to the top of search engine rankings.  They are just part of that effort.  You
 can get more information by googling SEO or visiting the psd2css Online forums. -->
 <meta name="description" content="Put the description of this page here" />
 <meta name="keywords" content="Put keywords for this page here separated by commas" />
 <meta name="generator" content="psd2css Online - Dynamic Web Pages from your Photoshop Design in seconds" />
 
 
-<!-- The CSS Reset from Eric Meyers 
+<!-- The CSS Reset from Eric Meyers
 <link rel="stylesheet" type="text/css" href="cssreset.css" media="screen" />-->
 
 <!-- The Primary External CSS style sheet. -->
@@ -55,7 +55,7 @@ can get more information by googling SEO or visiting the psd2css Online forums. 
 some javascript tricks.  We serve the script from Google because it's
 faster than most ISPs.  Get more information and documentation
 at http://jquery.com <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"> -->
-<script type="text/javascript" src="js/jquery-1.4.2.min.js"> </script> 
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"> </script>
 
 
 <!-- All the javascript generated for your design is in this file -->
@@ -71,12 +71,12 @@ at http://jquery.com <script type="text/javascript" src="http://ajax.googleapis.
 
 
 <!--for ImgSelect - http://odyniec.net/projects/imgareaselect/-->
-<link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />  
-<script type="text/javascript" src="js/jquery.imgareaselect.js"></script> 
+<link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
+<script type="text/javascript" src="js/jquery.imgareaselect.js"></script>
 
 
 <!--for Flot -->
-<script type="text/javascript" src="js/jquery.flot.js"></script> 
+<script type="text/javascript" src="js/jquery.flot.js"></script>
 
 <!--for COntent Slider - Jquery Slider/-->
  <link rel="stylesheet" type="text/css" href="css/jquery-slider.css">
@@ -96,7 +96,7 @@ setTimeout("blinker("+(i-1)+")",500);
 function set_state(state) {
 switch (state) {
 case 0: $("#nextBox").html("Start the Experiment by clicking on 'Select Image' and selecting an Input Image from the Mosaic");
-buttId="button1"; 
+buttId="button1";
 blinker(6);
 break;
 case 1: $("#nextBox").html("Select appropriate parameters and click on 'Run'.");
@@ -128,7 +128,7 @@ jstate=state;
         $("#Mosaic").show("slow", function() {
           ias.setOptions({ show: true });
           ias.update();
-          
+
         });
       }
 
@@ -160,10 +160,10 @@ function set_crop() {
 
 
     $.ajax({url: "crop.php" , type: "POST", data: aurl, async: false, dataType: "html", success: function(data) {
-		$("#Layer-4").html(data);		
+		$("#Layer-4").html(data);
 
 
-	       
+
 	     }});
 $("#start").css("display","block");
 $("#end").css("display","block");
@@ -188,24 +188,24 @@ function doTransform(){
 
 	var args;
 
-	
+
 	var checkBoxes = $("input[name=otype]");
 
 	$.each(checkBoxes, function() {
                 if ($(this).attr('checked')){
            	args = $(this).attr('value');
 
-        	}	
+        	}
         });
-		
-		
+
+
 		checkBoxes = $("input[name=stype]");
 
 	$.each(checkBoxes, function() {
                 if ($(this).attr('checked')){
            	args = args + "&stype=" + $(this).attr('value');
 
-        	}	
+        	}
         });
 
 checkBoxes = $("input[name=size]");
@@ -214,59 +214,59 @@ checkBoxes = $("input[name=size]");
                 if ($(this).attr('checked')){
            	args = args + "&size=" + $(this).attr('value');
 
-        	}	
+        	}
         });
-		
+
 		checkBoxes = $("input[name=ang]");
 
 	$.each(checkBoxes, function() {
                 if ($(this).attr('checked')){
            	args = args + "&ang=" + $(this).attr('value');
 
-        	}	
+        	}
         });
-		
+
 	if(!($('#Mosaic').is(":visible"))) {
 	var aurl = "trns.php?opn=morph&otype=" + args;
-       $("#slider").remove();	
+       $("#slider").remove();
        $.ajax({ url: aurl, type: "GET", async: false, dataType: "html", success: function(data){
-$(".content-conveyor", $("#sliderContent")).html(data);	
+$(".content-conveyor", $("#sliderContent")).html(data);
 
 	}});
 	$("#sliderContent").append('<div id="slider"></div>');
 
-    
+
 	var conveyor2 = $(".content-conveyor", $("#sliderContent")),
 	item2 = $(".item", $("#sliderContent"));
 
-	
+
 	//set length of conveyor
 	conveyor2.css("width", item2.length * parseInt(item2.css("width")));
         conveyor2.css("left","-" + ((item2.length * parseInt(item2.css("width"))) - parseInt($(".viewer", $("#sliderContent")).css("width"))) + "px");
 
-			
+
 	//config
 	var sliderOpts = {
 	  max: (item2.length * parseInt(item2.css("width"))) - parseInt($(".viewer", $("#sliderContent")).css("width")),
 	  value:  (item2.length * parseInt(item2.css("width"))) - parseInt($(".viewer", $("#sliderContent")).css("width")),
-	  slide: function(e, ui) { 
+	  slide: function(e, ui) {
 		conveyor2.css("left", "-" + ui.value + "px");
 
 
 
 	  }
 	};
-	
+
 	//create slider
 	$("#slider").slider(sliderOpts);
 
 set_state(2);
 
-       
 
-    $("img",$("#Layer-5")).attr("src",$("img",$(".item:last")).attr("src")); 
 
-       
+    $("img",$("#Layer-5")).attr("src",$("img",$(".item:last")).attr("src"));
+
+
 var myImage = new Image();
 myImage.name = $("img",$("#Layer-5")).attr("name");
 myImage.src = $("img",$("#Layer-5")).attr("src");
@@ -274,22 +274,22 @@ myImage.onload = function () {
   $("dims","#imgInfo").html(this.height + " x " + this.width);
 }}}
 
- 
+
 function confirmTo(url) {
 	var response = confirm('You will lose Session Data: Continue?');
 	if(response) {
 		window.location.href=url;
 	}
 }
- 
+
 
   $(document).ready (function() {
   buttId="button1";
-<?php if($_GET["exp"]=="piping"  || isset($_GET["assess"])) {
-	echo 'set_state(1);';
-	} else {
-	echo 'set_state(0);';
-	}
+<?php if ($_GET["exp"] == "piping" || isset($_GET["assess"])) {
+    echo 'set_state(1);';
+} else {
+    echo 'set_state(0);';
+}
 
 ?>
   $(".imageFull").hide();
@@ -303,23 +303,21 @@ function confirmTo(url) {
   $("button2","#Layer-2").click ( function () {
   doTransform();
   });
-   
+
 
   $("button4","#Layer-2").button();
   $("button4","#Layer-2").click ( function () {
- <?php if($_GET["exp"]!="piping" && !isset($_GET["assess"])) { echo ' set_state(0);'; } 
-		else { echo 'set_state(1);'; }?>
+ <?php if ($_GET["exp"] != "piping" && !isset($_GET["assess"])) {echo ' set_state(0);';} else {echo 'set_state(1);';}?>
     $("dims","#imgInfo").html("____ x ____ ");
-    $("img",$("#Layer-5")).attr("src","images/Layer-5.jpg");  
-<?php  if( $_GET["exp"]!="piping" ) { ?>
-  $("img",$("#Layer-4")).attr("src","<?php if(isset($_GET["assess"])) { echo 'images/temp/'.$_SESSION["id"].'_'.$_SESSION["currentS"].'_result.png'; } 
-		else { echo 'images/Layer-4.jpg'; } ?>"); <?php } ?>
- $("#sliderContent").replaceWith('      <div id="sliderContent" class="ui-corner-all">		<div class="viewer ui-corner-all">	  <div class="content-conveyor ui-helper-clearfix">	    <div class="item">	      <h2><?php if(isset($_GET["assess"])) {	  echo 'Assessment';	  } else { echo 'Start'; } ?></h2>	      <img src="<?php if(isset($_GET["assess"])) {	  echo 'images/temp/'.$_SESSION["id"].'_'.$_SESSION["currentS"].'.png';	  } else { echo 'images/Mosaicmorph.png'; } ?>" alt="picture" width="140px" height="140px"/>	      <dl class="details ui-helper-clearfix">		<dt><?php if(isset($_GET["assess"])) {	  echo 'This is the Input Image. Perform Operations to get the above result.';	  } else { echo 'Select a portion of the Mosaic on the Right and Transform... '; } ?></dt>	      </dl>	    </div>	  </div>	</div>	<div id="slider"></div>      </div>');
+    $("img",$("#Layer-5")).attr("src","images/Layer-5.jpg");
+<?php if ($_GET["exp"] != "piping") {?>
+  $("img",$("#Layer-4")).attr("src","<?php if (isset($_GET["assess"])) {echo 'images/temp/' . $_SESSION["id"] . '_' . $_SESSION["currentS"] . '_result.png';} else {echo 'images/Layer-4.jpg';}?>"); <?php }?>
+ $("#sliderContent").replaceWith('      <div id="sliderContent" class="ui-corner-all">		<div class="viewer ui-corner-all">	  <div class="content-conveyor ui-helper-clearfix">	    <div class="item">	      <h2><?php if (isset($_GET["assess"])) {echo 'Assessment';} else {echo 'Start';}?></h2>	      <img src="<?php if (isset($_GET["assess"])) {echo 'images/temp/' . $_SESSION["id"] . '_' . $_SESSION["currentS"] . '.png';} else {echo 'images/Mosaicmorph.png';}?>" alt="picture" width="140px" height="140px"/>	      <dl class="details ui-helper-clearfix">		<dt><?php if (isset($_GET["assess"])) {echo 'This is the Input Image. Perform Operations to get the above result.';} else {echo 'Select a portion of the Mosaic on the Right and Transform... ';}?></dt>	      </dl>	    </div>	  </div>	</div>	<div id="slider"></div>      </div>');
 });
- 
-  
-  $("#Mosaic").imgAreaSelect({ 
-  handles: true, 
+
+
+  $("#Mosaic").imgAreaSelect({
+  handles: true,
   movable: true,
   persistent: true,
   resizable: false,
@@ -329,60 +327,60 @@ function confirmTo(url) {
   imageWidth: 900,
   });
   toggleMosaic();
-  
-  <?php 
-  
-	if(isset($_GET["otype"])) { 
-		echo '
+
+  <?php
+
+if (isset($_GET["otype"])) {
+    echo '
 		checkBoxes = $("input[name=otype]");
 		$.each(checkBoxes, function() {
-            if ($(this).attr("value")=="'.$_GET["otype"].'"){
+            if ($(this).attr("value")=="' . $_GET["otype"] . '"){
 				$(this).click();
-        	}	
+        	}
         });	';
-	}
-	if(isset($_GET["stype"])) { 
-		echo '
+}
+if (isset($_GET["stype"])) {
+    echo '
 		checkBoxes = $("input[name=stype]");
 		$.each(checkBoxes, function() {
-            if ($(this).attr("value")=="'.$_GET["stype"].'"){
+            if ($(this).attr("value")=="' . $_GET["stype"] . '"){
 				$(this).click();
-        	}	
+        	}
         });	';
-	}
-	if(isset($_GET["size"])) { 
-		echo '
+}
+if (isset($_GET["size"])) {
+    echo '
 		checkBoxes = $("input[name=size]");
 		$.each(checkBoxes, function() {
-            if ($(this).attr("value")=="'.$_GET["size"].'"){
+            if ($(this).attr("value")=="' . $_GET["size"] . '"){
 				$(this).click();
-        	}	
+        	}
         });	';
-	}
-	if(isset($_GET["ang"])) { 
-		echo '
+}
+if (isset($_GET["ang"])) {
+    echo '
 		checkBoxes = $("input[name=ang]");
 		$.each(checkBoxes, function() {
-            if ($(this).attr("value")=="'.$_GET["ang"].'"){
+            if ($(this).attr("value")=="' . $_GET["ang"] . '"){
 				$(this).click();
-        	}	
+        	}
         });	';
-	}
-  ?>
-  
-  
-  
+}
+?>
+
+
+
   	  $("button7","#Layer-2").button();
   $("button7","#Layer-2").click( function() {
 	if(jstate>1) {
 		var answer = confirm("Retain Changes?")
 		if (answer){
 		var aurl="item=" + $(".item:last").html();
-		
+
 
     $.ajax({url: "write.php" , type: "POST", data: aurl, async: false, dataType: "html", success: function(data) {
 		window.location.href="piping.php?exp=piping";
-		   
+
 	     }});}
 	else{
 		window.location.href="piping.php?exp=piping";
@@ -399,7 +397,7 @@ function confirmTo(url) {
 
   <!-- This is 'Backgound_bkgnd_center_jpg' -->
   <div id="Layer-1" class="Backgound_bkgnd_center_jpg"  >
-    
+
 
     <!-- This is 'Mosaic_jpg' -->
     <div id="Mosaic" class="Mosaic_jpg" style="z-index: 100;" >
@@ -407,20 +405,20 @@ function confirmTo(url) {
 
     <!-- This is 'Thumbnails_jpg' -->
     <div id="Layer-7" class="Thumbnails_jpg"  >
-      <div id="sliderContent" class="ui-corner-all">	
+      <div id="sliderContent" class="ui-corner-all">
 	<div class="viewer ui-corner-all">
 	  <div class="content-conveyor ui-helper-clearfix">
 	    <div class="item">
-	      <h2><?php if(isset($_GET["assess"])) {
-	  echo 'Assessment';
-	  } else { echo 'Start'; } ?></h2>
-	      <img src="<?php if(isset($_GET["assess"])) {
-	  echo 'images/temp/'.$_SESSION["id"].'_'.$_SESSION["currentS"].'.png';
-	  } else { echo 'images/Mosaicmorph.png'; } ?>" alt="picture" width="140px" height="140px"/>
+	      <h2><?php if (isset($_GET["assess"])) {
+    echo 'Assessment';
+} else {echo 'Start';}?></h2>
+	      <img src="<?php if (isset($_GET["assess"])) {
+    echo 'images/temp/' . $_SESSION["id"] . '_' . $_SESSION["currentS"] . '.png';
+} else {echo 'images/Mosaicmorph.png';}?>" alt="picture" width="140px" height="140px"/>
 	      <dl class="details ui-helper-clearfix">
-		<dt><?php if(isset($_GET["assess"])) {
-	  echo 'This is the Input Image. Perform Operations to get the above result.';
-	  } else { echo 'Select a portion of the Mosaic on the Right and Transform... '; } ?></dt>
+		<dt><?php if (isset($_GET["assess"])) {
+    echo 'This is the Input Image. Perform Operations to get the above result.';
+} else {echo 'Select a portion of the Mosaic on the Right and Transform... ';}?></dt>
 	      </dl>
 	    </div>
 	  </div>
@@ -428,7 +426,7 @@ function confirmTo(url) {
 	<div id="slider"></div>
       </div>
     </div>
-   
+
 
     <!-- This Is 'outputLayer_jpg' -->
     <div id="Layer-5" class="outputLayer_jpg">
@@ -437,11 +435,10 @@ function confirmTo(url) {
 
     <!-- This is 'InputLayer_jpg' -->
     <div id="Layer-4" class="InputLayer_jpg">
-      <img src="<?php if(isset($_GET["source"]) || $_GET["exp"]=="piping") {
-	  echo 'images/temp/'.$_SESSION["id"].'_'.$_SESSION["currentS"].'.png';
-	  } else { if(isset($_GET["assess"])) { echo 'images/temp/'.$_SESSION["id"].'_'.$_SESSION["currentS"].'_result.png'; } 
-		else { echo 'images/Layer-4.jpg'; }} ?>" width="281" height="281" alt="InputLayer" /></div>
- 
+      <img src="<?php if (isset($_GET["source"]) || $_GET["exp"] == "piping") {
+    echo 'images/temp/' . $_SESSION["id"] . '_' . $_SESSION["currentS"] . '.png';
+} else {if (isset($_GET["assess"])) {echo 'images/temp/' . $_SESSION["id"] . '_' . $_SESSION["currentS"] . '_result.png';} else {echo 'images/Layer-4.jpg';}}?>" width="281" height="281" alt="InputLayer" /></div>
+
 
     <!-- This is 'TopBar_jpg' -->
     <div id="Layer-3" class="TopBar_jpg"  >
@@ -450,7 +447,7 @@ function confirmTo(url) {
       <!-- <div id="Layer-6" class="IIIT"  >
         <img src="images/iiit.png" width="100" height="70" alt="IIIT" class="pngimg" />
 	</div> -->
-	
+
 			<div id="topMenu">
 			<!-- <h1 style="text-align: center;">Virtual Lab for IMAGE PROCESSING</h1> -->
 <!-- <div class="home">
@@ -494,36 +491,36 @@ function confirmTo(url) {
 </ul> -->
 </div>
 			</div>
-			
+
     </div>
 
 
 	<div id="imgInfo">
 	<table>
 	<tr> <th width=300>
-	<?php if(isset($_GET["assess"])) { ?>Expected Output Image<?php } else {?> Input Image <?php } ?> 
+	<?php if (isset($_GET["assess"])) {?>Expected Output Image<?php } else {?> Input Image <?php }?>
 	</th> <th>
 	Output size
 	</th> </tr>
 	<tr> <td>
-	300 x 300 
+	300 x 300
 	</td> <td>
 	<dims> __ x __ </dims>
 	</td> </tr>
 	</table>
 	</div>
-	
+
     <!-- This is 'Parameters_jpg' -->
     <div id="Layer-2">
 
 	  <h2 style="text-align: center;">Morphological Operations</h2>
 <div id="nextBox">
 </div>
- 
-      <?php if (!isset($_GET["assess"]) && $_GET["exp"]!="piping")  {echo "<button1>Select Image</button1>";} ?>
+
+      <?php if (!isset($_GET["assess"]) && $_GET["exp"] != "piping") {echo "<button1>Select Image</button1>";}?>
       <button4>Reset</button4>
       <button2>Run</button2>
-	 <?php if($_GET["exp"]=="piping") { ?> <button7>Return to Piping</button7> <?php } ?>
+	 <?php if ($_GET["exp"] == "piping") {?> <button7>Return to Piping</button7> <?php }?>
      <br/><br/>
 
 <div class="Parameters">
@@ -537,7 +534,7 @@ function confirmTo(url) {
 <table>
 <tr><td width="200px">
 <b>Shape</b>
-<div id="type" class="param">	
+<div id="type" class="param">
 <input type="radio" name="stype" value="1" onclick="$('#angle').css('display','none');" checked/>Disc<br />
 <input type="radio" name="stype" value="2" onclick="$('#angle').css('display','none');" />Square<br/>
 <input type="radio" name="stype" value="3" onclick="$('#angle').css('display','block');" />line<br/>
@@ -563,8 +560,8 @@ function confirmTo(url) {
 			     border: solid grey 1px;height: auto; display: none">
 
 </div>
-      
-      
+
+
     </div>
 </body>
 
