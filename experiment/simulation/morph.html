@@ -334,32 +334,6 @@
         return dst
       }
 
-      async function processImages(primaryImg, secondaryImg, opt, fitting) {
-        processedImage = resultImage.clone()
-
-        let opern = [
-          '',
-          'Addition and ',
-          'Subtraction and ',
-          'Difference and ',
-          'Multiplication and ',
-          'Division and ',
-        ][opt]
-        let map_fn = ['', 'Clipping', 'Auto-Scaling'][fitting]
-
-        let content = `<div class="item">
-          <h2>Primary Image</h2>
-          <img id="primaryImage" alt="picture" width="140px" height="140px"/>
-        </div>
-        <div class="item">
-          <h2>Processed Image</h2>
-          <img id="processedImage" alt="picture" width="140px" height="140px"/>
-          <dl class="details ui-helper-clearfix"><dt>${opern}${map_fn}</dt></dl>
-        </div><br><br>`
-
-        $('#sliderContent').html(content)
-      }
-
       function confirmTo(url) {
         var response = confirm('You will lose Session Data: Continue?')
         if (response) {
