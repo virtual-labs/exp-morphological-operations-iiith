@@ -4,7 +4,7 @@ The experiment is designed to understand and learn the morphological operations 
 
 1. Select image from the mosaic using 'select image' option
 
-2. Select one option from 'Dilation', 'Erosion', 'Closing'and 'Opening'
+2. Select one option from 'Dilation', 'Erosion', 'Closing' and 'Opening'
 
 3. Select options from 'Shape' and 'Size' of structuring elements properties
 
