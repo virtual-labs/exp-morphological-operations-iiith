@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Morphological Operations Simulation</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        --bg: #f3f5f8;
+        --panel: #ffffff;
+        --border: #d4d9e0;
+        --accent: #1f6feb;
+        --muted: #5d6470;
+        --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: var(--bg);
+        color: #1f2937;
+      }
+
+      .app {
+        max-width: 1200px;
+        margin: 28px auto;
+        padding: 20px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 16px 20px;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: #f8fafc;
+        color: #111827;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: 1.3fr 0.8fr 0.8fr;
+        gap: 18px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        border-radius: 12px;
+        padding: 14px;
+        min-height: 260px;
+      }
+
+      .panel h3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+      }
+
+      .dims {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      .mosaic-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #293541;
+        overflow: hidden;
+        touch-action: none;
+      }
+
+      #Mosaic {
+        position: relative;
+      }
+
+      #Mosaic-img {
+        position: relative;
+        z-index: 1;
+        display: block;
+        max-width: 100%;
+        max-height: 420px;
+        border-radius: 8px;
+        user-select: none;
+        -webkit-user-drag: none;
+        touch-action: none;
+      }
+
+      .selection-overlay {
+        position: absolute;
+        border: 2px solid #3b82f6;
+        background: rgba(59, 130, 246, 0.18);
+        pointer-events: none;
+        display: none;
+        z-index: 20;
+      }
+
+      .image-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 240px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: linear-gradient(180deg, #f8fafc, #eef2f7);
+        overflow: hidden;
+      }
+
+      .image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: inherit;
+      }
+
+      .controls {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 20px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 16px 18px;
+      }
+
+      .group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .group h3 {
+        margin: 0 0 6px;
+      }
+
+      .group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+      }
+
+      .inline-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+      }
+
+      fieldset {
+        margin: 0;
+        padding: 10px 12px 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      legend {
+        padding: 0 6px;
+        font-weight: 600;
+      }
+
+      .slider-row {
+        display: grid;
+        grid-template-columns: 9.5rem 1fr 4.5rem;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+        color: var(--muted);
+      }
+
+      .slider-row input[type="range"] {
+        width: 100%;
+      }
+
+      .slider-row input[type="number"] {
+        width: 100%;
+        padding: 4px 6px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font: inherit;
+      }
+
+      .hint {
+        margin: 6px 0 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .equation {
+        margin: 4px 0 0;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.9rem;
+        overflow-wrap: anywhere;
+      }
+
+      .sub-options {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 16px;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .se-grid {
+        align-self: flex-start;
+        border-collapse: collapse;
+      }
+
+      .se-grid td {
+        width: 26px;
+        height: 26px;
+        border: 1px solid var(--border);
+        background: #f8fafc;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #fff;
+      }
+
+      .se-grid td.on {
+        background: var(--accent);
+      }
+
+      .se-grid td:not(.on) {
+        color: #1f2937;
+      }
+
+      .steps {
+        margin-top: 18px;
+      }
+
+      .steps-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .steps-grid figure {
+        margin: 0;
+        width: 150px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .steps-grid img {
+        display: block;
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #eef2f7;
+      }
+
+      .status {
+        margin-top: 16px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+
+      @media (max-width: 900px) {
+        .app {
+          margin: 0 auto;
+          padding: 16px;
+        }
+
+        .topbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .workspace,
+        .controls {
+          grid-template-columns: 1fr;
+        }
+
+        .slider-row {
+          grid-template-columns: 1fr 4.5rem;
+        }
+
+        .slider-row > span {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="topbar">
+        <div class="toolbar">
+          <button id="button1" type="button">Select Image</button>
+          <button id="button4" type="button">Reset</button>
+          <button id="button2" type="button" class="primary">Run</button>
+        </div>
+        <div id="status" class="status">OpenCV is being initialized…</div>
+      </div>
+
+      <div class="workspace">
+        <div id="Mosaic" class="panel">
+          <h3>Mosaic</h3>
+          <div class="mosaic-wrap">
+            <img
+              id="Mosaic-img"
+              src="images/Mosaicmorph.png"
+              alt="Mosaic"
+              draggable="false"
+            />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Input Image <span id="inputDims" class="dims">— × —</span></h3>
+          <div class="image-box">
+            <img id="layer4Image" src="images/Layer-4.jpg" alt="Selected input" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            Output Image <span id="outputDims" class="dims">— × —</span>
+          </h3>
+          <div class="image-box">
+            <img id="layer5outputImage" src="images/Layer-5.jpg" alt="Output" />
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="group">
+          <h3>Operation</h3>
+          <div class="inline-options">
+            <label
+              ><input type="radio" name="operation" value="dilation" checked />
+              Dilation</label
+            >
+            <label
+              ><input type="radio" name="operation" value="erosion" />
+              Erosion</label
+            >
+            <label
+              ><input type="radio" name="operation" value="closing" />
+              Closing</label
+            >
+            <label
+              ><input type="radio" name="operation" value="opening" />
+              Opening</label
+            >
+          </div>
+
+          <fieldset>
+            <legend>Structuring element shape</legend>
+            <div class="inline-options">
+              <label
+                ><input type="radio" name="shape" value="disk" /> Disk</label
+              >
+              <label
+                ><input type="radio" name="shape" value="square" checked />
+                Square</label
+              >
+              <label
+                ><input type="radio" name="shape" value="line" /> Line</label
+              >
+            </div>
+            <div id="angleRow" class="sub-options" hidden>
+              <span>Line angle:</span>
+              <label><input type="radio" name="angle" value="0" checked /> 0°</label>
+              <label><input type="radio" name="angle" value="30" /> 30°</label>
+              <label><input type="radio" name="angle" value="60" /> 60°</label>
+              <label><input type="radio" name="angle" value="90" /> 90°</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Structuring element size</legend>
+            <div class="inline-options">
+              <label
+                ><input type="radio" name="size" value="3" /> 3 × 3</label
+              >
+              <label
+                ><input type="radio" name="size" value="5" checked /> 5 ×
+                5</label
+              >
+              <label
+                ><input type="radio" name="size" value="7" /> 7 × 7</label
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="group">
+          <h3>Operation Definition</h3>
+          <p id="operationFormula" class="equation"></p>
+          <p id="operationHint" class="hint"></p>
+          <p class="hint">Structuring element B (filled = part of B, ● = origin):</p>
+          <table id="seTable" class="se-grid" aria-label="Structuring element"></table>
+        </div>
+      </div>
+
+      <div class="panel steps">
+        <h3>Intermediate Results</h3>
+        <div id="stepsGrid" class="steps-grid">
+          <p class="hint">Run an operation to see the results here.</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/opencv.js"></script>
+    <script type="text/javascript">
+      const app = {
+        mosaicMat: null,
+        inputGray: null,
+        processedImage: null,
+        selection: null,
+        dragging: false,
+        startPoint: null,
+        currentPoint: null,
+      };
+
+      const mosaic = document.getElementById("Mosaic");
+      const mosaicWrap = document.querySelector(".mosaic-wrap");
+      const mosaicImg = document.getElementById("Mosaic-img");
+      const inputImg = document.getElementById("layer4Image");
+      const outputImg = document.getElementById("layer5outputImage");
+      const statusEl = document.getElementById("status");
+      const selectionOverlay = document.createElement("div");
+      selectionOverlay.className = "selection-overlay";
+      mosaicWrap.appendChild(selectionOverlay);
+
+      function safeDelete(mat) {
+        if (mat && typeof mat.delete === "function" && !mat.isDeleted()) {
+          mat.delete();
+        }
+      }
+
+      function setStatus(message, isError) {
+        statusEl.textContent = message;
+        statusEl.style.background = isError ? "#fef2f2" : "#eff6ff";
+        statusEl.style.color = isError ? "#b91c1c" : "#1d4ed8";
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      /* ---------- Mosaic selection (native pointer / touch events) ---------- */
+
+      function placeSelectionOverlay(displayX, displayY, displayW, displayH) {
+        const wrapRect = mosaicWrap.getBoundingClientRect();
+        const imageRect = mosaicImg.getBoundingClientRect();
+        const offsetX = imageRect.left - wrapRect.left;
+        const offsetY = imageRect.top - wrapRect.top;
+
+        selectionOverlay.style.left = offsetX + displayX + "px";
+        selectionOverlay.style.top = offsetY + displayY + "px";
+        selectionOverlay.style.width = displayW + "px";
+        selectionOverlay.style.height = displayH + "px";
+      }
+
+      function getSelectionPoint(event) {
+        const source = event.touches?.[0] || event.changedTouches?.[0] || event;
+        return {
+          clientX: source.clientX,
+          clientY: source.clientY,
+        };
+      }
+
+      function beginSelection(event) {
+        if (app.dragging) return;
+        if (
+          event.type === "mousedown" &&
+          event.button !== 0 &&
+          event.which !== 1
+        ) {
+          return;
+        }
+        event.preventDefault();
+
+        const point = getSelectionPoint(event);
+        const rect = mosaicImg.getBoundingClientRect();
+        const localX = clamp(point.clientX - rect.left, 0, rect.width);
+        const localY = clamp(point.clientY - rect.top, 0, rect.height);
+
+        app.dragging = true;
+        app.startPoint = {
+          x: localX * (mosaicImg.naturalWidth / rect.width),
+          y: localY * (mosaicImg.naturalHeight / rect.height),
+        };
+        app.currentPoint = { ...app.startPoint };
+
+        placeSelectionOverlay(localX, localY, 0, 0);
+        selectionOverlay.style.display = "block";
+
+        setStatus("Drag across the mosaic to create a crop region.");
+      }
+
+      function moveSelection(event) {
+        if (!app.dragging || !app.startPoint) return;
+
+        event.preventDefault();
+        const point = getSelectionPoint(event);
+
+        const rect = mosaicImg.getBoundingClientRect();
+        const scaleX = mosaicImg.naturalWidth / rect.width;
+        const scaleY = mosaicImg.naturalHeight / rect.height;
+        const localX = clamp(point.clientX - rect.left, 0, rect.width);
+        const localY = clamp(point.clientY - rect.top, 0, rect.height);
+
+        const x = localX * scaleX;
+        const y = localY * scaleY;
+        app.currentPoint = { x, y };
+
+        const x1 = Math.min(app.startPoint.x, x);
+        const y1 = Math.min(app.startPoint.y, y);
+        const x2 = Math.max(app.startPoint.x, x);
+        const y2 = Math.max(app.startPoint.y, y);
+
+        placeSelectionOverlay(
+          x1 / scaleX,
+          y1 / scaleY,
+          (x2 - x1) / scaleX,
+          (y2 - y1) / scaleY,
+        );
+      }
+
+      function finalizeSelection(event) {
+        if (!app.dragging) return;
+
+        if (event) {
+          event.preventDefault();
+          moveSelection(event);
+        }
+
+        const x1 = Math.min(app.startPoint.x, app.currentPoint.x);
+        const y1 = Math.min(app.startPoint.y, app.currentPoint.y);
+        const x2 = Math.max(app.startPoint.x, app.currentPoint.x);
+        const y2 = Math.max(app.startPoint.y, app.currentPoint.y);
+
+        app.dragging = false;
+        selectionOverlay.style.display = "none";
+
+        if (x2 - x1 < 5 || y2 - y1 < 5) {
+          setStatus(
+            "Selection is too small. Drag a larger region on the mosaic.",
+            true,
+          );
+          return;
+        }
+
+        const left = clamp(Math.round(x1), 0, mosaicImg.naturalWidth - 1);
+        const top = clamp(Math.round(y1), 0, mosaicImg.naturalHeight - 1);
+        app.selection = {
+          x1: left,
+          y1: top,
+          width: clamp(Math.round(x2 - x1), 1, mosaicImg.naturalWidth - left),
+          height: clamp(Math.round(y2 - y1), 1, mosaicImg.naturalHeight - top),
+        };
+
+        cropFromSelection(app.selection);
+      }
+
+      function setupMosaicSelection() {
+        mosaicImg.addEventListener("pointerdown", (event) => {
+          beginSelection(event);
+          if (app.dragging && mosaicImg.setPointerCapture) {
+            mosaicImg.setPointerCapture(event.pointerId);
+          }
+        });
+        mosaicImg.addEventListener("pointermove", moveSelection);
+        mosaicImg.addEventListener("pointerup", finalizeSelection);
+        mosaicImg.addEventListener("pointercancel", finalizeSelection);
+        mosaicImg.addEventListener("mousedown", beginSelection);
+        mosaicImg.addEventListener("mousemove", moveSelection);
+        window.addEventListener("mouseup", finalizeSelection);
+        mosaicImg.addEventListener("touchstart", beginSelection, {
+          passive: false,
+        });
+        mosaicImg.addEventListener("touchmove", moveSelection, {
+          passive: false,
+        });
+        mosaicImg.addEventListener("touchend", finalizeSelection, {
+          passive: false,
+        });
+        mosaicImg.addEventListener("touchcancel", finalizeSelection, {
+          passive: false,
+        });
+      }
+
+      /* ---------- Image I/O ---------- */
+
+      function loadImage(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = "Anonymous";
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, img.width, img.height);
+            const mat = new cv.Mat(
+              imageData.height,
+              imageData.width,
+              cv.CV_8UC4,
+            );
+            mat.data.set(imageData.data);
+            resolve(mat);
+          };
+          img.onerror = (err) => reject(err);
+          img.src = url;
+        });
+      }
+
+      function matToDataUrl(mat) {
+        const canvas = document.createElement("canvas");
+        cv.imshow(canvas, mat);
+        return canvas.toDataURL();
+      }
+
+      function setDims(id, width, height) {
+        document.getElementById(id).textContent =
+          width && height ? width + " × " + height : "— × —";
+      }
+
+      function cropFromSelection(selection) {
+        if (!app.mosaicMat) {
+          setStatus("The mosaic image has not loaded yet.", true);
+          return;
+        }
+
+        const rect = new cv.Rect(
+          selection.x1,
+          selection.y1,
+          selection.width,
+          selection.height,
+        );
+        const roi = app.mosaicMat.roi(rect);
+        const gray = new cv.Mat();
+        cv.cvtColor(roi, gray, cv.COLOR_RGBA2GRAY);
+        roi.delete();
+
+        safeDelete(app.inputGray);
+        app.inputGray = gray;
+        inputImg.src = matToDataUrl(gray);
+        setDims("inputDims", gray.cols, gray.rows);
+
+        safeDelete(app.processedImage);
+        app.processedImage = null;
+        outputImg.src = "images/Layer-5.jpg";
+        setDims("outputDims");
+        clearSteps();
+
+        setStatus(
+          "Input region selected (" +
+            gray.cols +
+            " × " +
+            gray.rows +
+            "). Choose an operation and structuring element, then click Run.",
+        );
+      }
+
+      /* ---------- Controls ---------- */
+
+      function getCheckedValue(name) {
+        return document.querySelector('input[name="' + name + '"]:checked')
+          ?.value;
+      }
+
+      function setChecked(name, value) {
+        document.querySelector(
+          'input[name="' + name + '"][value="' + value + '"]',
+        ).checked = true;
+      }
+
+      function readParams() {
+        return {
+          operation: getCheckedValue("operation") || "dilation",
+          shape: getCheckedValue("shape") || "square",
+          size: Number(getCheckedValue("size") || 5),
+          angle: Number(getCheckedValue("angle") || 0),
+        };
+      }
+
+      const OPERATION_TEXT = {
+        dilation: {
+          label: "Dilation",
+          formula: "X ⊕ B: each pixel takes the maximum over B",
+          hint: "Bright (foreground) regions grow; small dark gaps and holes shrink or close.",
+        },
+        erosion: {
+          label: "Erosion",
+          formula: "X ⊖ B: each pixel takes the minimum over B",
+          hint: "Bright regions shrink; bright details smaller than B disappear.",
+        },
+        closing: {
+          label: "Closing",
+          formula: "X • B = (X ⊕ B) ⊖ B: dilation, then erosion",
+          hint: "Fills dark gaps and holes smaller than B while keeping object size.",
+        },
+        opening: {
+          label: "Opening",
+          formula: "X ∘ B = (X ⊖ B) ⊕ B: erosion, then dilation",
+          hint: "Removes bright details smaller than B while keeping object size.",
+        },
+      };
+
+      function updateDefinition() {
+        const params = readParams();
+        document.getElementById("angleRow").hidden = params.shape !== "line";
+        document.getElementById("operationFormula").textContent =
+          OPERATION_TEXT[params.operation].formula;
+        document.getElementById("operationHint").textContent =
+          OPERATION_TEXT[params.operation].hint;
+        renderStructuringElement(params);
+      }
+
+      function resetControls() {
+        setChecked("operation", "dilation");
+        setChecked("shape", "square");
+        setChecked("size", "5");
+        setChecked("angle", "0");
+        updateDefinition();
+      }
+
+      /* ---------- Structuring element ---------- */
+
+      // size × size grid of 0/1 values with the origin at the centre.
+      function structuringGrid(params) {
+        const { shape, size, angle } = params;
+        const r = (size - 1) / 2;
+        const grid = Array.from({ length: size }, () => new Array(size).fill(0));
+
+        if (shape === "square") {
+          grid.forEach((row) => row.fill(1));
+        } else if (shape === "disk") {
+          // Same disk OpenCV builds with MORPH_ELLIPSE.
+          const se = cv.getStructuringElement(
+            cv.MORPH_ELLIPSE,
+            new cv.Size(size, size),
+          );
+          for (let y = 0; y < size; y++) {
+            for (let x = 0; x < size; x++) grid[y][x] = se.data[y * size + x] ? 1 : 0;
+          }
+          se.delete();
+        } else {
+          // Digital line of `size` pixels through the origin, anticlockwise
+          // from the x-axis; mirrored so it stays symmetric about the origin.
+          const t = (angle * Math.PI) / 180;
+          const c = Math.cos(t);
+          const s = Math.sin(t);
+          const step = Math.max(Math.abs(c), Math.abs(s));
+          for (let i = 0; i <= r; i++) {
+            const dx = Math.round((i / step) * c);
+            const dy = Math.round((i / step) * s);
+            grid[r - dy][r + dx] = 1;
+            grid[r + dy][r - dx] = 1;
+          }
+        }
+        return grid;
+      }
+
+      function structuringMat(params) {
+        const grid = structuringGrid(params);
+        return cv.matFromArray(params.size, params.size, cv.CV_8U, grid.flat());
+      }
+
+      function renderStructuringElement(params) {
+        const table = document.getElementById("seTable");
+        table.innerHTML = "";
+        if (!window.cv || typeof cv.Mat === "undefined") return;
+        const grid = structuringGrid(params);
+        const r = (params.size - 1) / 2;
+        grid.forEach((row, y) => {
+          const tr = document.createElement("tr");
+          row.forEach((value, x) => {
+            const td = document.createElement("td");
+            if (value) td.className = "on";
+            if (x === r && y === r) td.textContent = "●";
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+        });
+      }
+
+      /* ---------- Morphology ---------- */
+
+      function erode(src, se) {
+        const dst = new cv.Mat();
+        cv.erode(
+          src,
+          dst,
+          se,
+          new cv.Point(-1, -1),
+          1,
+          cv.BORDER_CONSTANT,
+          cv.morphologyDefaultBorderValue(),
+        );
+        return dst;
+      }
+
+      function dilate(src, se) {
+        const dst = new cv.Mat();
+        cv.dilate(
+          src,
+          dst,
+          se,
+          new cv.Point(-1, -1),
+          1,
+          cv.BORDER_CONSTANT,
+          cv.morphologyDefaultBorderValue(),
+        );
+        return dst;
+      }
+
+      // Returns the output and, for opening/closing, the first-stage image.
+      function applyMorphology(src, params) {
+        const se = structuringMat(params);
+        let output;
+        let intermediate = null;
+
+        if (params.operation === "dilation") {
+          output = dilate(src, se);
+        } else if (params.operation === "erosion") {
+          output = erode(src, se);
+        } else if (params.operation === "opening") {
+          intermediate = { mat: erode(src, se), caption: "1. Erosion" };
+          output = dilate(intermediate.mat, se);
+        } else {
+          intermediate = { mat: dilate(src, se), caption: "1. Dilation" };
+          output = erode(intermediate.mat, se);
+        }
+
+        se.delete();
+        return { output, intermediate };
+      }
+
+      function describeElement(params) {
+        const shape =
+          params.shape === "line"
+            ? "line at " + params.angle + "°"
+            : params.shape;
+        return params.size + " × " + params.size + " " + shape;
+      }
+
+      function describeRun(params) {
+        return (
+          OPERATION_TEXT[params.operation].label +
+          " with a " +
+          describeElement(params) +
+          " structuring element"
+        );
+      }
+
+      /* ---------- Run ---------- */
+
+      function clearSteps() {
+        document.getElementById("stepsGrid").innerHTML =
+          '<p class="hint">Run an operation to see the results here.</p>';
+      }
+
+      function addStepFigure(grid, src, caption) {
+        const figure = document.createElement("figure");
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = caption;
+        const figcaption = document.createElement("figcaption");
+        figcaption.textContent = caption;
+        figure.append(img, figcaption);
+        grid.appendChild(figure);
+      }
+
+      // Applies the selected operation to app.inputGray and renders the
+      // output and intermediate results. Returns the params used.
+      function runMorphology() {
+        const params = readParams();
+        const { output, intermediate } = applyMorphology(app.inputGray, params);
+
+        safeDelete(app.processedImage);
+        app.processedImage = output;
+        outputImg.src = matToDataUrl(output);
+        setDims("outputDims", output.cols, output.rows);
+
+        const grid = document.getElementById("stepsGrid");
+        grid.innerHTML = "";
+        addStepFigure(grid, inputImg.src, "Input");
+        if (intermediate) {
+          addStepFigure(grid, matToDataUrl(intermediate.mat), intermediate.caption);
+          intermediate.mat.delete();
+          addStepFigure(
+            grid,
+            outputImg.src,
+            "2. " +
+              (params.operation === "opening" ? "Dilation" : "Erosion") +
+              " → " +
+              OPERATION_TEXT[params.operation].label,
+          );
+        } else {
+          addStepFigure(grid, outputImg.src, OPERATION_TEXT[params.operation].label);
+        }
+        return params;
+      }
+
+      function setupControls() {
+        document
+          .querySelectorAll(
+            'input[name="operation"], input[name="shape"], input[name="size"], input[name="angle"]',
+          )
+          .forEach((input) => input.addEventListener("change", updateDefinition));
+        updateDefinition();
+      }
+
+      function resetSimulation() {
+        safeDelete(app.inputGray);
+        safeDelete(app.processedImage);
+        app.inputGray = null;
+        app.processedImage = null;
+        app.selection = null;
+        app.dragging = false;
+        selectionOverlay.style.display = "none";
+
+        inputImg.src = "images/Layer-4.jpg";
+        outputImg.src = "images/Layer-5.jpg";
+        setDims("inputDims");
+        setDims("outputDims");
+        clearSteps();
+        resetControls();
+
+        setStatus(
+          "Simulation reset. Select a mosaic region, then choose an operation and structuring element, then click Run.",
+        );
+      }
+
+      function onOpenCvReady() {
+        setupMosaicSelection();
+        updateDefinition();
+
+        loadImage("images/Mosaicmorph.png")
+          .then((mat) => {
+            app.mosaicMat = mat;
+            setStatus(
+              "OpenCV is ready. Drag or touch-drag on the mosaic to select an input region.",
+            );
+          })
+          .catch((err) => {
+            console.error(err);
+            setStatus("Could not load the mosaic image.", true);
+          });
+      }
+
+      document.getElementById("button1").addEventListener("click", () => {
+        mosaic.style.display = "block";
+        mosaic.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        setStatus(
+          "Drag or touch-drag a rectangle over the mosaic to select an input region.",
+        );
+      });
+
+      document.getElementById("button2").addEventListener("click", () => {
+        if (!app.inputGray) {
+          setStatus(
+            "Please select a valid region from the mosaic first.",
+            true,
+          );
+          return;
+        }
+        const params = runMorphology();
+        setStatus("Processing complete (" + describeRun(params) + ").");
+      });
+      document
+        .getElementById("button4")
+        .addEventListener("click", resetSimulation);
+
+      setupControls();
+
+      function waitForOpenCv(maxAttempts) {
+        let attempts = 0;
+        const timer = setInterval(() => {
+          attempts += 1;
+          if (window.cv && typeof window.cv.Mat !== "undefined") {
+            clearInterval(timer);
+            onOpenCvReady();
+            return;
+          }
+          if (attempts >= maxAttempts) {
+            clearInterval(timer);
+            setStatus("OpenCV did not initialize correctly.", true);
+          }
+        }, 250);
+      }
+
+      if (window.cv && typeof window.cv.Mat !== "undefined") {
+        onOpenCvReady();
+      } else {
+        waitForOpenCv(120);
+      }
+    </script>
+  </body>
+</html>

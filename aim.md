@@ -1,0 +1,1 @@
+The aim of this experiment is to study morphological operations for analysing and modifying the shape and structure of objects in an image, and to understand how the size and shape of the structuring element affect the resulting image.

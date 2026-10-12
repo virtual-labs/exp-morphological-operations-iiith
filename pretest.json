@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "1. What is the small template used to define the shape and size of a morphological operation called?",
+      "answers": {
+        "a": "Structuring element",
+        "b": "Histogram",
+        "c": "Fourier spectrum",
+        "d": "Threshold image"
+      },
+      "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct. A structuring element is a small matrix whose size and spatial arrangement determine how a morphological operation acts on an image.",
+        "b": "Incorrect. A histogram describes the distribution of image intensities and is not the template used for morphological processing.",
+        "c": "Incorrect. A Fourier spectrum represents frequency information and is not the template used for morphological processing.",
+        "d": "Incorrect. A threshold image is an image produced by classifying pixels and is not the template used for morphological processing."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "2. Which morphological operation generally enlarges or expands foreground objects in a binary image?",
+      "answers": {
+        "a": "Erosion",
+        "b": "Dilation",
+        "c": "Opening",
+        "d": "Closing"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Erosion decreases the size of foreground objects.",
+        "b": "Correct. Dilation expands foreground objects and can connect objects separated by a sufficiently small gap.",
+        "c": "Incorrect. Opening combines erosion and dilation and is used to smooth objects and remove certain thin boundary features.",
+        "d": "Incorrect. Closing combines dilation and erosion and is used to smooth boundaries, fill gaps, and eliminate sufficiently small holes."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "3. Which operation is defined by first applying erosion and then applying dilation with the same structuring element?",
+      "answers": {
+        "a": "Dilation",
+        "b": "Closing",
+        "c": "Opening",
+        "d": "Reflection"
+      },
+      "correctAnswer": "c",
+      "explanations": {
+        "a": "Incorrect. Dilation is a single morphological operation and does not have this two-step definition.",
+        "b": "Incorrect. Closing uses the reverse order of the two operations.",
+        "c": "Correct. Opening is defined as $X \\\\circ B = (X \\\\ominus B) \\\\oplus B$, meaning erosion is followed by dilation.",
+        "d": "Incorrect. Reflection changes the orientation of a structuring element and is not the two-step operation described here."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "4. Which morphological operation is most appropriate for eliminating small holes and filling gaps in the boundary of foreground objects?",
+      "answers": {
+        "a": "Dilation",
+        "b": "Erosion",
+        "c": "Opening",
+        "d": "Closing"
+      },
+      "correctAnswer": "d",
+      "explanations": {
+        "a": "Incorrect. Dilation expands objects but does not provide the complete two-step smoothing operation described for eliminating small holes.",
+        "b": "Incorrect. Erosion shrinks foreground regions and causes holes within those regions to become larger.",
+        "c": "Incorrect. Opening is mainly associated with removing thin bulges and breaking narrow connections.",
+        "d": "Correct. Closing is defined as $X \\\\bullet B = (X \\\\oplus B) \\\\ominus B$ and tends to eliminate small holes, fill boundary gaps, and fuse narrow breaks."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "5. If the size of the structuring element is increased, which factor is most directly affected in a morphological operation?",
+      "answers": {
+        "a": "The size of the image file",
+        "b": "The effect of the operation on image features",
+        "c": "The number of color channels",
+        "d": "The bit depth of the input image"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Structuring-element size does not directly determine the storage size of the image file.",
+        "b": "Correct. The size of the structuring element determines the size of the image features affected by the operation.",
+        "c": "Incorrect. Structuring-element size does not determine the number of image channels.",
+        "d": "Incorrect. Structuring-element size does not change the bit depth of the input image."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "6. In grayscale morphological processing, which operation determines the output pixel value by taking the maximum of the neighbourhood pixel values?",
+      "answers": {
+        "a": "Dilation",
+        "b": "Erosion",
+        "c": "Opening",
+        "d": "Closing"
+      },
+      "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct. In grayscale morphology, dilation uses the maximum value in the neighbourhood.",
+        "b": "Incorrect. In grayscale morphology, erosion uses the minimum value in the neighbourhood.",
+        "c": "Incorrect. Opening is a combination of erosion and dilation rather than the single extrema operation described here.",
+        "d": "Incorrect. Closing is a combination of dilation and erosion rather than the single extrema operation described here."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "7. A narrow connection joins two large foreground regions in a binary image. Which operation is most appropriate for breaking such a connection when the structuring element is suitably chosen?",
+      "answers": {
+        "a": "Closing",
+        "b": "Dilation",
+        "c": "Opening",
+        "d": "Translation"
+      },
+      "correctAnswer": "c",
+      "explanations": {
+        "a": "Incorrect. Closing tends to fuse narrow breaks and fill gaps rather than break narrow connections.",
+        "b": "Incorrect. Dilation expands foreground regions and can connect nearby components.",
+        "c": "Correct. Opening can break narrow bands connecting large foreground regions when the structuring element is appropriately sized.",
+        "d": "Incorrect. Translation changes the position of a set and does not perform the described shape modification."
+      },
+      "difficulty": "advanced"
+    },
+    {
+      "question": "8. Why is the shape of a structuring element selected according to the geometric features of interest in an image?",
+      "answers": {
+        "a": "Because morphological operations always require a circular structuring element",
+        "b": "Because the structuring element determines the image bit depth",
+        "c": "Because the shape has no effect on morphological processing",
+        "d": "Because the shape of the structuring element can be chosen to suit the shapes of objects or features of interest"
+      },
+      "correctAnswer": "d",
+      "explanations": {
+        "a": "Incorrect. The shape of a structuring element is variable and depends on the application and image content.",
+        "b": "Incorrect. The shape of the structuring element does not determine the bit depth of the image.",
+        "c": "Incorrect. The choice of structuring-element shape affects how morphological processing interacts with image features.",
+        "d": "Correct. A structuring element can be selected to match the geometric characteristics of the features being processed."
+      },
+      "difficulty": "advanced"
+    },
+    {
+      "question": "9. Which statement best describes the relationship between opening and closing?",
+      "answers": {
+        "a": "Both use exactly the same sequence of erosion and dilation",
+        "b": "Opening and closing use reversed orders of erosion and dilation",
+        "c": "Opening uses only dilation, while closing uses only erosion",
+        "d": "Neither operation depends on the structuring element"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. The two operations differ in the order in which their component operations are applied.",
+        "b": "Correct. Opening applies erosion followed by dilation, whereas closing applies dilation followed by erosion.",
+        "c": "Incorrect. Both opening and closing are combinations of erosion and dilation.",
+        "d": "Incorrect. The effect of both opening and closing depends on the size and shape of the structuring element."
+      },
+      "difficulty": "advanced"
+    }
+  ]
+}
