@@ -1,20 +1,158 @@
-[
-{"question":"1. A binary image consists of disks of sizes 3,7,9,15,17 pixels. We want to remove all the disks of size less than 13 pixels. Which morphological opeartion perform the task?",
-"answers":{
-            "a":"Erosion with structuring element(disk) of size 15",
-            "b":"Erosion with structuring element(disk) of size 13",
-            "c":"Dilation with structuring element(disk) of size 15",
-            "d":"Dilation with structuring element(disk) of size 13"
-          },
-"correctAnswer":"a"},
-
-{"question":"2. Which morphological operation is used for smoothing the contour of an object in grayscale image",
-"answers":{
-            "a":"Erosion",
-            "b":"Dilation",
-            "c":"Closing",
-            "d":"Opening"
-          },
-"correctAnswer":"c"}
-
-]
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "1. Mathematical morphology is primarily concerned with operations that analyze or modify image",
+      "answers": {
+        "a": "Forms and shapes of structures",
+        "b": "File names and formats",
+        "c": "Audio frequencies",
+        "d": "Camera exposure settings"
+      },
+      "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct. Mathematical morphology is a set-theoretic approach used to extract information about forms and shapes of structures in images.",
+        "b": "Incorrect. File names and formats are not the subject of morphological processing.",
+        "c": "Incorrect. Audio frequencies are outside the image-shape processing focus of this experiment.",
+        "d": "Incorrect. Camera exposure settings are not the mathematical objects operated on by morphological processing."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "2. Which operation decreases the size of foreground objects in a binary image?",
+      "answers": {
+        "a": "Dilation",
+        "b": "Opening",
+        "c": "Erosion",
+        "d": "Closing"
+      },
+      "correctAnswer": "c",
+      "explanations": {
+        "a": "Incorrect. Dilation expands foreground objects.",
+        "b": "Incorrect. Opening is a combination of erosion and dilation and has a broader smoothing effect.",
+        "c": "Correct. Erosion decreases the size of foreground regions and causes holes within those regions to become larger.",
+        "d": "Incorrect. Closing is a combination of dilation and erosion and generally adds pixels to smooth and fill gaps."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "3. Which operation can connect two objects that are separated by a sufficiently small distance?",
+      "answers": {
+        "a": "Erosion",
+        "b": "Dilation",
+        "c": "Opening",
+        "d": "Reflection"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Erosion decreases foreground regions and does not generally connect nearby objects.",
+        "b": "Correct. Dilation expands objects and can connect objects separated by a distance less than the effective width of the structuring element.",
+        "c": "Incorrect. Opening can break narrow connections rather than generally joining nearby objects.",
+        "d": "Incorrect. Reflection changes the orientation of a structuring element and does not perform the described connection of objects."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "4. Which sequence defines the closing operation?",
+      "answers": {
+        "a": "Erosion followed by dilation",
+        "b": "Dilation followed by erosion",
+        "c": "Dilation followed by reflection",
+        "d": "Reflection followed by erosion"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. This is the sequence used to define opening.",
+        "b": "Correct. Closing is defined as $X \\\\bullet B = (X \\\\oplus B) \\\\ominus B$, so dilation is followed by erosion.",
+        "c": "Incorrect. Reflection is not the second operation in the definition of closing.",
+        "d": "Incorrect. Reflection is not the first operation in the definition of closing."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "5. An application contains small gaps along the boundary of a foreground object. Which operation is most appropriate for filling such gaps, when the structuring element is suitably chosen?",
+      "answers": {
+        "a": "Closing",
+        "b": "Erosion",
+        "c": "Reflection",
+        "d": "Translation"
+      },
+      "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct. Closing tends to fill gaps in boundaries and fuse narrow breaks when the structuring element is appropriately chosen.",
+        "b": "Incorrect. Erosion shrinks foreground regions and can make gaps or holes more prominent.",
+        "c": "Incorrect. Reflection changes the structuring element's orientation and does not fill boundary gaps.",
+        "d": "Incorrect. Translation changes the position of a set and does not fill gaps in object boundaries."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "6. A circular structuring element is preferred for an image containing predominantly circular or non-oriented objects. What principle does this illustrate?",
+      "answers": {
+        "a": "The structuring-element shape should be unrelated to the image",
+        "b": "Only square structuring elements are valid",
+        "c": "The structuring-element shape should be selected according to the geometric features of interest",
+        "d": "The structuring-element shape determines the image resolution"
+      },
+      "correctAnswer": "c",
+      "explanations": {
+        "a": "Incorrect. The choice of structuring-element shape depends on the application and image content.",
+        "b": "Incorrect. The shape of a structuring element is variable rather than restricted to squares.",
+        "c": "Correct. The desirable shape of a structuring element depends on the geometric characteristics of the features of interest.",
+        "d": "Incorrect. Structuring-element shape does not determine the spatial resolution of the input image."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "7. A binary image contains a thin bulge on the boundary of a larger foreground object. Which operation is described as eliminating such thin boundary bulges?",
+      "answers": {
+        "a": "Dilation",
+        "b": "Closing",
+        "c": "Translation",
+        "d": "Opening"
+      },
+      "correctAnswer": "d",
+      "explanations": {
+        "a": "Incorrect. Dilation expands foreground objects rather than providing the combined smoothing effect described for thin boundary bulges.",
+        "b": "Incorrect. Closing is described mainly in terms of filling gaps, fusing narrow breaks, and eliminating small holes.",
+        "c": "Incorrect. Translation changes the position of a set and does not smooth object boundaries.",
+        "d": "Correct. Opening smooths objects and can eliminate thin bulges appearing on object boundaries."
+      },
+      "difficulty": "advanced"
+    },
+    {
+      "question": "8. In grayscale morphology, a neighbourhood has pixel values $20$, $35$, $50$, and $80$. According to the extrema-based definition, what value would dilation select from this neighbourhood?",
+      "answers": {
+        "a": "$20$",
+        "b": "$35$",
+        "c": "$50$",
+        "d": "$80$"
+      },
+      "correctAnswer": "d",
+      "explanations": {
+        "a": "Incorrect. This is the smallest value in the neighbourhood, not the extremum used for grayscale dilation.",
+        "b": "Incorrect. This value is neither the required maximum nor the minimum of the neighbourhood.",
+        "c": "Incorrect. This value is not the maximum of the neighbourhood.",
+        "d": "Correct. Grayscale dilation uses the maximum neighbourhood value, and the maximum here is $80$."
+      },
+      "difficulty": "advanced"
+    },
+    {
+      "question": "9. The same structuring element $B$ is used for opening and closing. Which statement correctly describes the two operations?",
+      "answers": {
+        "a": "Opening applies erosion then dilation, while closing applies dilation then erosion",
+        "b": "Opening and closing both apply erosion twice",
+        "c": "Opening applies dilation twice, while closing applies erosion twice",
+        "d": "The order of operations is irrelevant"
+      },
+      "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct. Opening is $X \\\\circ B = (X \\\\ominus B) \\\\oplus B$, while closing is $X \\\\bullet B = (X \\\\oplus B) \\\\ominus B$.",
+        "b": "Incorrect. Neither operation is defined as applying erosion twice.",
+        "c": "Incorrect. Neither operation is defined as applying dilation twice.",
+        "d": "Incorrect. The order of erosion and dilation determines whether the operation is opening or closing."
+      },
+      "difficulty": "advanced"
+    }
+  ]
+}
